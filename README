@@ -1,0 +1,17 @@
+To use this extenstion, add -exts=/path/to/lcdnotify.pl and -notifytype=lcdnotify
+to either your start script, or to your .ttytterrc file.
+
+This will intialize the LCD screen on startup and show a test pattern.
+
+Default behaviour is to output all tweets that would show up in your feed to the screen -
+this can be modified by adding '-notifies=(options)' where options are any of:
+   me, default, reply, dm
+This will cause only those tweets to show up on the screen.
+
+The LCD assumes a 20x4 LCD screen and will format the incoming tweets to show
+username of the tweet in the title bar at top, the first 20 characters of the tweet
+on ine 2, the next 20 characters on line three, and the remaining on line 4 as a scroller
+type. The script will not split a word on line 3 - instead the complete word will move to line 4
+for ease of reading.
+
+If you have any questions or comments - feel free to hit me up on twitter at @shockwaver.
