@@ -17,16 +17,16 @@
 # Created 8/17/2012 - Chris Taylor (@shockwaver)
 # Version 1.0
 
-###############################
-## DEBUG MODE            ######
-## set lcdnotify to 1    ######
-## for verbose debug msgs######
-my $lcdnotify_testing=0; ######
-if ($lcdnotify_testing)  ######
-{                        ######
-	use Data::Dumper;    ######
-}                        ######
-###############################
+################################
+## DEBUG MODE             ######
+## set lcdnotify to 1     ######
+## for verbose debug msgs ######
+my $lcdnotify_testing=0;  ######
+if ($lcdnotify_testing)   ######
+{                         ######
+	use Data::Dumper; ######
+}                         ######
+################################
 
 # scroller coords for line2, line3 and line4
 my $line2coords="1 2";
@@ -118,25 +118,15 @@ sub handle_notification {
 	# certain characters don't play nice with the regexp below
 	# strip out new lines, and the slanty ' character
 	
+	# Clear the old lines out - this is important if the next tweet is less then 41 characters
+	($line1, $line2, $line3)="";
 	
 	# break down the tweet in to LCd friendly lines
 	# new regex (.{0,20})(.{0,20})\s(.*)
 	# $1 is first 20 characters
 	# $2 is next 20 characters, but will not break up a word
 	# $3 is the rest of the string
-	# OLD
-	# if ($line2 = substr($tweet, 0, 20))
-	# {
-		# if ($line3 = substr($tweet, 20, 20))
-		# {
-			# $line4 = "-- ".substr($tweet, 40);
-		# } else {
-			# $line3=substr($tweet,20);
-			# $line4="";
-		# }
-	# } else {
-		# $line2=substr($tweet, 0);
-	# }
+
 	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
 	$line2=$1;
 	$line3=$2;
@@ -174,23 +164,15 @@ sub notifier_lcdnotify {
 	if ($lcdnotify_testing==1) {print "\nTEXT: $text\n";}
 	chomp($text);
 	if (!defined($class) || !defined($notify_tool_path)) {
-		# we are being asked to initialize
-		# $notify_tool_path = &wherecheck("trying to find lcdnotify",
-			# "lcdnotify",
-# "install that shit yo.\n")
-			# unless ($notify_tool_path);
+		# We are being asked to initalize by TTYtter
 		if (!defined($class)) {
 			if ($lcdnotify_testing) {print "Calling init_lcd()\n"}
 			if (!init_lcd()) {
 				print "\n******\ninitlcd() failure\n*****\n";
 				die "Init_lcd failed at";
 			}
-			# return 1 if ($script || $notifyquiet);
 			# don't pass to handler if initalizing
 			return 1;
-			# $class = 'lcdnotify support activated';
-			# $username = "lcdnotify";
-			# $tweet = 'Notifications Active.';
 		}
 	}
 	
@@ -206,6 +188,10 @@ $shutdown = sub {
 	print $lcd_handle "bye\n";
 	if ($lcdnotify_testing) {print "shutting down - bye sent.\n";}
 	my $ref = shift;
+	
+	# Pass the shutdown sequence back to the default handler
 	&defaultshutdown($ref);
 };
+
+# Return 1
 1;
