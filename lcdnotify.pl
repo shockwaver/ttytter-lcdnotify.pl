@@ -17,17 +17,17 @@
 # Created 8/17/2012 - Chris Taylor (@shockwaver)
 # Version 1.0
 
-################################
-## DEBUG MODE             ######
-## set lcdnotify to 1     ######
-## for verbose debug msgs ######
-my $lcdnotify_testing=0;  ######
-if ($lcdnotify_testing)   ######
-{                         ######
-	use Data::Dumper; ######
-}                         ######
-################################
-
+# ################################
+# ## DEBUG MODE             ######
+# ## set lcdnotify to 1     ######
+# ## for verbose debug msgs ######
+# my $lcdnotify_testing=0;  ######
+# if ($lcdnotify_testing)   ######
+# {                         ######
+	# use Data::Dumper; ######
+# }                         ######
+# ################################
+print "test\n";
 use IO::Socket;
 use Switch;
 
@@ -82,14 +82,14 @@ $addaction = sub {
 };
 
 sub print_help {
-	print $stdout   "lcdnotify extension, by @shockwaver.\n".
-					"   /lcdnotify help			- shows this help.\n".
-					"   /lcdnotify disable		- disables lcdnotify and releases the lcd screen.\n".
-					"   /lcdnotify enable		- enables lcdnotify and reinitalizes the lcd screen.\n".
-					"   /lcdnotify dm			- shows status of dm notifications.\n".
-					"   /lcdnotify dm enable	- enabled seperate dm screen on LCD.\n".
-					"   /lcdnotify dm disable	- disables seperate dm screen on LCD (default).\n".
-					"   /lcdnotify debug		- toggles verbose debug messages.\n";
+	print $stdout   "lcdnotify extension, by \@shockwaver.\n".
+					"   /lcdnotify help         - shows this help.\n".
+					"   /lcdnotify disable      - disables lcdnotify and releases the lcd screen.\n".
+					"   /lcdnotify enable       - enables lcdnotify and reinitalizes the lcd screen.\n".
+					"   /lcdnotify dm           - shows status of dm notifications.\n".
+					"   /lcdnotify dm enable    - enabled seperate dm screen on LCD.\n".
+					"   /lcdnotify dm disable   - disables seperate dm screen on LCD (default).\n".
+					"   /lcdnotify debug        - toggles verbose debug messages.\n";
 	return 1;
 }
 
@@ -243,7 +243,7 @@ sub notifier_lcdnotify {
 			}
 			#turn on notifications at start time
 			$lcdnotify_enabled=1;
-			
+			$lcdnotify_testing=0;
 			# don't pass to handler if initalizing
 			return 1;
 		}
