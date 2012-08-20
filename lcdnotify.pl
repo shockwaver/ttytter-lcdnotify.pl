@@ -103,6 +103,7 @@ sub dm_setting {
 		} else {
 			print $stdout "lcdnotify - Seperate DM LCD screen is disabled.\n";
 			return;
+		}
 	} elsif ($dm_command eq "enable") {
 		$dm_enabled=1;
 		# create dm screen - intial priority LOW
