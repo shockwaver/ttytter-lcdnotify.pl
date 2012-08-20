@@ -3,7 +3,7 @@
 #   subrouting is called - creating the LCDd/lcdproc screen for twitter
 #   and displaying a test message.
 #
-#
+# test
 # When a notification is sent by TTYtter to notify_lcdnotify(), 
 #    we pass the class and the tweet hash (raw tweet date) to handle_notification()
 #
