@@ -79,7 +79,7 @@ $addaction = sub {
 		}
 	}
 	return 0;
-}
+};
 
 sub print_help {
 	print $stdout   "lcdnotify extension, by @shockwaver.\n".
@@ -227,7 +227,7 @@ sub handle_notification {
 # This sub is called when TTYtter sends a notification and -notifytype=lcdnotify
 sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
-	$lcdnotify_testing=1;
+	
 	my $class = shift;
 	my $text = shift;
 	my $ref = shift;
