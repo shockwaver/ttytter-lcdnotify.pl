@@ -3,7 +3,6 @@
 #   subrouting is called - creating the LCDd/lcdproc screen for twitter
 #   and displaying a test message.
 #
-# test
 # When a notification is sent by TTYtter to notify_lcdnotify(), 
 #    we pass the class and the tweet hash (raw tweet date) to handle_notification()
 #
@@ -29,12 +28,100 @@ if ($lcdnotify_testing)   ######
 }                         ######
 ################################
 
+use IO::Socket;
+use Switch;
+
 # scroller coords for line2, line3 and line4
 my $line2coords="1 2";
 my $line3coords="1 3 20 3 m 2";
 my $line4coords="1 4 20 4 m 2";
 
-use IO::Socket;
+# hook for /lcdnotify commands
+$addaction = sub {
+	my $command = shift;
+
+	# check passed command to see if it is /lcdnotify - and strip /lcdnotify
+	if ($command =~ s#^/lcdnotify ##) {
+		# Is there anything after the /lcdnotify command?
+		if (length($command)) {
+			switch ($command) {
+				case "disable" 		{$lcdnotify_enabled=0;
+										shutdown_lcd();
+										print $stdout "lcdnotify disabled.\n";
+										return 1;}
+				case "enable"  		{$lcdnotify_enabled=1;
+										init_lcd();
+										print $stdout "lcdnotify enabled.\n";
+										return 1;}
+				case "dm"			{dm_setting(); return 1;}
+				case "dm enable"	{dm_setting("enable"); return 1;}
+				case "dm disable"	{dm_setting("disable"); return 1;}
+				case "debug"		{
+										if ($lcdnotify_testing) {
+											print "lcdnotify - debug mode DISABLED.\n";
+											$lcdnotify_testing=0;
+										} else {
+											print "lcdnotify - debug mode ENABLED.\n";
+											$lcdnotify_testing=1;
+										}
+										return 1;
+									}
+				case "help"			{print_help();
+										return 1;}
+				else				{print_help();
+										return 1;}
+			}
+		} 
+		else
+		{
+			print_help();
+			return 1;
+		}
+	}
+	return 0;
+}
+
+sub print_help {
+	print $stdout   "lcdnotify extension, by @shockwaver.\n".
+					"   /lcdnotify help			- shows this help.\n".
+					"   /lcdnotify disable		- disables lcdnotify and releases the lcd screen.\n".
+					"   /lcdnotify enable		- enables lcdnotify and reinitalizes the lcd screen.\n".
+					"   /lcdnotify dm			- shows status of dm notifications.\n".
+					"   /lcdnotify dm enable	- enabled seperate dm screen on LCD.\n".
+					"   /lcdnotify dm disable	- disables seperate dm screen on LCD (default).\n".
+					"   /lcdnotify debug		- toggles verbose debug messages.\n";
+	return 1;
+}
+
+# check the dm setting, or set it to enable/disable
+sub dm_setting {
+	$dm_command=shift || "status";
+	if ($dm_command eq "status") {
+		if ($dm_enabled) {
+			print $stdout "lcdnotify - Seperate DM LCD screen is enabled.\n";
+			return;
+		} else {
+			print $stdout "lcdnotify - Seperate DM LCD screen is disabled.\n";
+			return;
+	} elsif ($dm_command eq "enable") {
+		$dm_enabled=1;
+		# create dm screen - intial priority LOW
+		print $lcd_handle "screen_add twitter_dm\n";
+		print $lcd_handle "screen_set twitter_dm -name twitter_dm -priority 224\n";
+		print $lcd_handle "widget_add twitter_dm name title\n";
+		print $lcd_handle "widget_add twitter_dm line2 string\n";
+		print $lcd_handle "widget_add twitter_dm line3 scroller\n";
+		print $lcd_handle "widget_add twitter_dm line4 scroller\n";
+		if ($lcdnotify_testing) {print "dm lcd screen init - priority set low. - dm_enabled: $dm_enabled\n";}
+		print $stdout "lcdnotify - DM LCD screen enabled.\n";
+	} elsif ($dm_command eq "disable") {
+		$dm_enabled=0;
+		# delete the dm screen from the LCD
+		print $lcd_handle "screen_del twitter_dm\n";
+		if ($lcdnotify_testing) {print "dm lcd screen deleted. - dm_enabled: $dm_enabled\n";}
+		print $stdout "lcdnotify - DM LCD screen disabled.\n";
+	}
+}
 
 # This will initalize the LCD screen when the script/extension is loaded.
 sub init_lcd {
@@ -53,13 +140,7 @@ sub init_lcd {
 		print $lcd_handle "widget_add twitter line2 string\n";
 		print $lcd_handle "widget_add twitter line3 scroller\n";
 		print $lcd_handle "widget_add twitter line4 scroller\n";
-		# create dm screen - intial priority LOW
-		print $lcd_handle "screen_add twitter_dm\n";
-		print $lcd_handle "screen_set twitter_dm -name twitter_dm -priority 224\n";
-		print $lcd_handle "widget_add twitter_dm name title\n";
-		print $lcd_handle "widget_add twitter_dm line2 string\n";
-		print $lcd_handle "widget_add twitter_dm line3 scroller\n";
-		print $lcd_handle "widget_add twitter_dm line4 scroller\n";
+
 		
 		# Set initial messages on twitter screen
 		if ($lcdnotify_testing) 
@@ -84,6 +165,11 @@ sub init_lcd {
 	return 1;
 }
 
+sub shutdown_lcd {
+	print $lcd_handle "bye\n";
+	if ($lcdnotify_testing) {print "shutting down - bye sent.\n";}
+}
+
 # This sub will spit the mssage out to the LCD screen - breaking it down in to 20 character lines
 # line2 is string and has characters 1,20
 # line3 is scroller and has characters 21,39 (if they exist)
@@ -93,25 +179,7 @@ sub handle_notification {
 	my $message_hash=shift;
 	if ($lcdnotify_testing) {print "Inside handle_notification\n";}
 	# if ($lcdnotify_testing) {print Dumper($message_hash);}
-	# # handle various classes of tweet differently - this is mostly to strip out the garbage.
-	# # DEPRECIATED - using the hash is more elegant since all the variables are in there
-	# # no need to regexp is out
-	# if ($class eq "DM") 
-	# {
-		 # # direct message - strip out the crap
-		# $message =~m/\[.*\]\[(.*)\/.*]\W(.*)/;
-		# ($username, $tweet)=($1,$2);
-		# if ($lcdnotify_testing) {print "\nDM 1- $1\n2- $2\n\n)";}
-	# } 
-	# elsif ($class eq "default")
-	# {
-		# $message =~ /.*\<(.*)\>\W(.*)/;
-		# ($username, $tweet)=($1,$2);
-		# if ($lcdnotify_testing) {print "default \n1- $1\n2- $2\n\n)";}
-	# } else
-	# {
-		# $tweet=$message;
-	# }
+
 	$username=&descape($message_hash->{'user'}->{'screen_name'});
 	$tweet=&descape($message_hash->{'text'});
 	if ($lcdnotify_testing) {print "username: $username --- tweet:\n$tweet\n";}
@@ -172,9 +240,18 @@ sub notifier_lcdnotify {
 				print "\n******\ninitlcd() failure\n*****\n";
 				die "Init_lcd failed at";
 			}
+			#turn on notifications at start time
+			$lcdnotify_enabled=1;
+			
 			# don't pass to handler if initalizing
 			return 1;
 		}
+	}
+	
+	# is lcdnotify_enabled false? if so, don't send notification.
+	if (!$lcdnotify_enabled) {
+		if ($lcdnotify_testing) {print "lcdnotify_enabled: $lcdnotify_enabled - skipping notification.\n";}
+		return 1;
 	}
 	
 	if ($lcdnotify_testing) {print $stdout "\npath: $notify_tool_path - $class- \"$username\" \"$tweet\"\n\n";}
@@ -186,8 +263,7 @@ sub notifier_lcdnotify {
 }
 $shutdown = sub {
 	# ttytter is shutting down - kill the open connection
-	print $lcd_handle "bye\n";
-	if ($lcdnotify_testing) {print "shutting down - bye sent.\n";}
+	shutdown_lcd();
 	my $ref = shift;
 	
 	# Pass the shutdown sequence back to the default handler
