@@ -250,6 +250,7 @@ sub notifier_lcdnotify {
 	}
 	
 	# is lcdnotify_enabled false? if so, don't send notification.
+	if ($lcdnotify_testing) {print "LCDNOTIFY_ENABLED: $lcdnotify_enabled\n";}
 	if (!$lcdnotify_enabled) {
 		if ($lcdnotify_testing) {print "lcdnotify_enabled: $lcdnotify_enabled - skipping notification.\n";}
 		return 1;
