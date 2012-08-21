@@ -21,7 +21,7 @@
 # ## DEBUG MODE             ######
 # ## set lcdnotify to 1     ######
 # ## for verbose debug msgs ######
-# my $lcdnotify_testing=0;  ######
+my $lcdnotify_testing=1;  ######
 # if ($lcdnotify_testing)   ######
 # {                         ######
 	# use Data::Dumper; ######
@@ -243,7 +243,7 @@ sub notifier_lcdnotify {
 			}
 			#turn on notifications at start time
 			$lcdnotify_enabled=1;
-			$lcdnotify_testing=0;
+			# $lcdnotify_testing=0;
 			# don't pass to handler if initalizing
 			return 1;
 		}
@@ -256,8 +256,6 @@ sub notifier_lcdnotify {
 	}
 	
 	if ($lcdnotify_testing) {print $stdout "\npath: $notify_tool_path - $class- \"$username\" \"$tweet\"\n\n";}
-	# old method of dumping to log file
-	#system("$notify_tool_path","$class","\<$username\>","$tweet");
 	if ($lcdnotify_testing) {print "calling handle_notification\n";}
 	handle_notification($class,$ref);
 	return 1;
