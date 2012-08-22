@@ -193,9 +193,9 @@ sub handle_notification {
 	# replace unicode punctuation (open and close quote, apostrophe, etc) with asciii versions
 	# as LCD screen does not display those characters.
 	# single quotes (left and right):
-	$tweet=s/\x{2018}|\x{2019}/'/g;
+	$tweet=~s/\x{2018}|\x{2019}/'/g;
 	# double quotes (several unicode versions):
-	$tweet=s/\x{201C}|\x{201D}|\x{201f}|\x{301D}\x{301E}|\x{FF02}/"/g;
+	$tweet=~s/\x{201C}|\x{201D}|\x{201f}|\x{301D}\x{301E}|\x{FF02}/"/g;
 	
 	# strip newline characters - causes issues when passing to LCD
 	$tweet=~s/\n/ /g;
