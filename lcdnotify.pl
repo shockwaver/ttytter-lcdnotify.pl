@@ -30,7 +30,6 @@
 print "test\n";
 use IO::Socket;
 use Switch;
-use Encode;
 
 # scroller coords for line2, line3 and line4
 my $line2coords="1 2";
@@ -155,6 +154,8 @@ sub init_lcd {
 		print $lcd_handle "widget_set twitter line2 $line2coords \"lcdnotify.pl loaded.\"\n";
 		print $lcd_handle "widget_set twitter line3 $line3coords \"********************\"\n";
 		print $lcd_handle "widget_set twitter line4 $line4coords \"--------------------\"\n";
+		# set mode as utf-8
+		binmode($lcd_handle, ":utf8");
 		if ($lcdnotify_testing) {print "LCD Initialized.\n";}
 	}
 	else
@@ -214,16 +215,15 @@ sub handle_notification {
 			print "Successfully connected to lcdproc server.\n"; 
 			print "hello\n";
 			print "widget_set twitter name \"$username\"\n";
-			print "widget_set twitter line2 $line2coords \"$line2\"\n" encode('utf-8' => $line2);
-			print "widget_set twitter line3 $line3coords \"$line3\"\n" encode('utf-8' => $line3);
-			print "widget_set twitter line4 $line4coords \"$line4\"\n" encode('utf-8' => $line4);
+			print "widget_set twitter line2 $line2coords \"$line2\"\n";
+			print "widget_set twitter line3 $line3coords \"$line3\"\n";
+			print "widget_set twitter line4 $line4coords \"$line4\"\n";
 		}
 		print $lcd_handle "hello\n";
 		print $lcd_handle "widget_set twitter name \"$username\"\n";
-		# handle unicode utf-8 characters without warning
-		print $lcd_handle "widget_set twitter line2 $line2coords \"$line2\"\n" encode('utf-8' => $line2);
-		print $lcd_handle "widget_set twitter line3 $line3coords \"$line3\"\n" encode('utf-8' => $line3);
-		print $lcd_handle "widget_set twitter line4 $line4coords \"$line4\"\n" encode('utf-8' => $line4);
+		print $lcd_handle "widget_set twitter line2 $line2coords \"$line2\"\n";
+		print $lcd_handle "widget_set twitter line3 $line3coords \"$line3\"\n";
+		print $lcd_handle "widget_set twitter line4 $line4coords \"$line4\"\n";
 	} else {
 		die "connection failure at";
 	}
