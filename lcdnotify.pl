@@ -21,7 +21,7 @@
 # ## DEBUG MODE             ######
 # ## set lcdnotify to 1     ######
 # ## for verbose debug msgs ######
-my $lcdnotify_testing=1;  ######
+# my $lcdnotify_testing=1;  ######
 # if ($lcdnotify_testing)   ######
 # {                         ######
 	# use Data::Dumper; ######
@@ -191,10 +191,13 @@ sub handle_notification {
 	# Clear the old lines out - this is important if the next tweet is less then 41 characters
 	($line1, $line2, $line3)="";
 	
+	# strip newline characters - causes issues when passing to LCD
+	$tweet=~s/\n/ /g;
+	
 	# break down the tweet in to LCd friendly lines
 	# new regex (.{0,20})(.{0,20})\s(.*)
 	# $1 is first 20 characters
-	# $2 is next 20 characters, but will not break up a word
+	# $2 is next 20 characters, but will not break up a word at the end
 	# $3 is the rest of the string
 
 	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
@@ -210,15 +213,16 @@ sub handle_notification {
 			print "Successfully connected to lcdproc server.\n"; 
 			print "hello\n";
 			print "widget_set twitter name \"$username\"\n";
-			print "widget_set twitter line2 $line2coords \"$line2\"\n";
-			print "widget_set twitter line3 $line3coords \"$line3\"\n";
-			print "widget_set twitter line4 $line4coords \"$line4\"\n";
+			print "widget_set twitter line2 $line2coords \"$line2\"\n" encode('utf-8' => $line2);
+			print "widget_set twitter line3 $line3coords \"$line3\"\n" encode('utf-8' => $line3);
+			print "widget_set twitter line4 $line4coords \"$line4\"\n" encode('utf-8' => $line4);
 		}
 		print $lcd_handle "hello\n";
 		print $lcd_handle "widget_set twitter name \"$username\"\n";
-		print $lcd_handle "widget_set twitter line2 $line2coords \"$line2\"\n";
-		print $lcd_handle "widget_set twitter line3 $line3coords \"$line3\"\n";
-		print $lcd_handle "widget_set twitter line4 $line4coords \"$line4\"\n";
+		# handle unicode utf-8 characters without warning
+		print $lcd_handle "widget_set twitter line2 $line2coords \"$line2\"\n" encode('utf-8' => $line2);
+		print $lcd_handle "widget_set twitter line3 $line3coords \"$line3\"\n" encode('utf-8' => $line3);
+		print $lcd_handle "widget_set twitter line4 $line4coords \"$line4\"\n" encode('utf-8' => $line4);
 	} else {
 		die "connection failure at";
 	}
