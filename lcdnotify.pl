@@ -146,9 +146,9 @@ sub init_lcd {
 		# Set initial messages on twitter screen
 		if ($lcdnotify_testing) 
 		{
-		print "widget_set twitter line2 $line2coords \"lcdnotify.pl loaded.\"\n";
-		print "widget_set twitter line3 $line3coords \"********************\"\n";
-		print "widget_set twitter line4 $line4coords \"--------------------\"\n";
+			print "widget_set twitter line2 $line2coords \"lcdnotify.pl loaded.\"\n";
+			print "widget_set twitter line3 $line3coords \"********************\"\n";
+			print "widget_set twitter line4 $line4coords \"--------------------\"\n";
 		}
 		print $lcd_handle "widget_set twitter name lcdnotify.pl\n";
 		print $lcd_handle "widget_set twitter line2 $line2coords \"lcdnotify.pl loaded.\"\n";
@@ -187,11 +187,15 @@ sub handle_notification {
 	$tweet=&descape($message_hash->{'text'});
 	if ($lcdnotify_testing) {print "username: $username --- tweet:\n$tweet\n";}
 	
-	# certain characters don't play nice with the regexp below
-	# strip out new lines, and the slanty ' character
-	
 	# Clear the old lines out - this is important if the next tweet is less then 41 characters
 	($line1, $line2, $line3)="";
+	
+	# replace unicode punctuation (open and close quote, apostrophe, etc) with asciii versions
+	# as LCD screen does not display those characters.
+	# single quotes (left and right):
+	$tweet=s/\x{2018}|\x{2019}/'/g;
+	# double quotes (several unicode versions):
+	$tweet=s/\x{201C}|\x{201D}|\x{201f}|\x{301D}\x{301E}|\x{FF02}/"/g;
 	
 	# strip newline characters - causes issues when passing to LCD
 	$tweet=~s/\n/ /g;
