@@ -30,6 +30,7 @@
 print "test\n";
 use IO::Socket;
 use Switch;
+use Encode;
 
 # scroller coords for line2, line3 and line4
 my $line2coords="1 2";
