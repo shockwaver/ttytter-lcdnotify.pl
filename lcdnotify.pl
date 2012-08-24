@@ -188,7 +188,7 @@ sub handle_notification {
 	if ($lcdnotify_testing) {print "username: $username --- tweet:\n$tweet\n";}
 	
 	# Clear the old lines out - this is important if the next tweet is less then 41 characters
-	($line1, $line2, $line3, $1, $2, $3)="";
+	($line1, $line2, $line3)="";
 	
 	# replace unicode punctuation (open and close quote, apostrophe, etc) with asciii versions
 	# as LCD screen does not display those characters.
