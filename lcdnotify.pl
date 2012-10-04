@@ -47,14 +47,14 @@ $addaction = sub {
 			switch ($command) {
 				case "disable" 		{$lcdnotify_enabled=0;
 										#shutdown_lcd();
-										$store->{'test'}="0";
-										print "disable global: ".$store->{'test'}."\n";
+										$store->{'lcdnotify'}="0";
+										print "disable global: ".$store->{'lcdnotify'}."\n";
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
 										#init_lcd();
-										$store->{'test'}="1";
-										print "enable global: ".$store->{'test'}."\n";
+										$store->{'lcdnotify'}="1";
+										print "enable global: ".$store->{'lcdnotify'}."\n";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
 				case "dm"			{dm_setting(); return 1;}
@@ -248,7 +248,7 @@ sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
 	
 	#global test
-	print "Store master test variable:".$store->{'test'}."\n";
+	print "Store master test variable:".$store->{'lcdnotify'}."\n";
 	
 	$lcdnotify_testing=1;
 	my $class = shift;
