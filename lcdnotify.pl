@@ -49,7 +49,7 @@ $addaction = sub {
 				case "disable" 		{$lcdnotify_enabled=0;
 										#shutdown_lcd();
 										print "pre disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
-										$store->{'lcdnotify'}="0";
+										$store->{'lcdnotify'}->{'test'}="0";
 										print "disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										print Dumper($store);
 										print $stdout "lcdnotify disabled.\n";
@@ -57,7 +57,7 @@ $addaction = sub {
 				case "enable"  		{$lcdnotify_enabled=1;
 										#init_lcd();
 										print "pre enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
-										$store->{'lcdnotify'}="1";
+										$store->{'lcdnotify'}->{'test'}="1";
 										print "enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
@@ -192,6 +192,7 @@ sub handle_notification {
 	my $class=shift;
 	my $message_hash=shift;
 	if ($lcdnotify_testing) {print "Inside handle_notification\n";}
+	print Dumper($store);
 	# if ($lcdnotify_testing) {print Dumper($message_hash);}
 
 	$username=&descape($message_hash->{'user'}->{'screen_name'});
@@ -272,7 +273,7 @@ sub notifier_lcdnotify {
 				die "Init_lcd failed at";
 			}
 			#turn on notifications at start time
-			#$lcdnotify_enabled=1;
+			$lcdnotify_enabled=1;
 			$store->{'lcdnotify'}->{'test'}="stupid";
 			# $lcdnotify_testing=0;
 			# don't pass to handler if initalizing
