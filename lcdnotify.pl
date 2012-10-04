@@ -250,6 +250,7 @@ sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
 	
 	#global test
+	$store->{'lcdnotify'}="stupid";
 	print "Store master test variable:".$store->{'lcdnotify'}."\n";
 	
 	$lcdnotify_testing=1;
