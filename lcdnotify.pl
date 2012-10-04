@@ -250,7 +250,6 @@ sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
 	
 	#global test
-	$store->{'lcdnotify'}="stupid";
 	print "Store master test variable:".$store->{'lcdnotify'}."\n";
 	
 	$lcdnotify_testing=1;
@@ -269,6 +268,7 @@ sub notifier_lcdnotify {
 			}
 			#turn on notifications at start time
 			#$lcdnotify_enabled=1;
+			$store->{'lcdnotify'}="stupid";
 			# $lcdnotify_testing=0;
 			# don't pass to handler if initalizing
 			return 1;
