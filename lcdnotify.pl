@@ -46,13 +46,15 @@ $addaction = sub {
 		if (length($command)) {
 			switch ($command) {
 				case "disable" 		{$lcdnotify_enabled=0;
-										shutdown_lcd();
+										#shutdown_lcd();
 										$store->{'test'}="0";
+										print "disable global: ".$store->{'test'}."\n";
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
-										init_lcd();
+										#init_lcd();
 										$store->{'test'}="1";
+										print "enable global: ".$store->{'test'}."\n";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
 				case "dm"			{dm_setting(); return 1;}
