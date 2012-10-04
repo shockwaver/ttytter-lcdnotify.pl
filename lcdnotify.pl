@@ -251,7 +251,10 @@ sub notifier_lcdnotify {
 	
 	#global test
 	print "Store master test variable:".$store->{'lcdnotify'}."\n";
-	
+	for my $key ( keys %store ) {
+        my $value = $store{$key};
+        print "$key => $value\n";
+    }
 	$lcdnotify_testing=1;
 	my $class = shift;
 	my $text = shift;
