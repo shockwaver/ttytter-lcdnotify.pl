@@ -64,6 +64,7 @@ $addaction = sub {
 											print "lcdnotify - debug mode ENABLED.\n";
 											$lcdnotify_testing=1;
 										}
+										print "lcdnotify status - $lcdnotify_testing\n";
 										return 1;
 									}
 				case "help"			{print_help();
@@ -188,7 +189,7 @@ sub handle_notification {
 	if ($lcdnotify_testing) {print "username: $username --- tweet:\n$tweet\n";}
 	
 	# Clear the old lines out - this is important if the next tweet is less then 41 characters
-	($line1, $line2, $line3)="";
+	($line1, $line2, $line3, $1, $2, $3)="";
 	
 	# replace unicode punctuation (open and close quote, apostrophe, etc) with asciii versions
 	# as LCD screen does not display those characters.
@@ -225,6 +226,11 @@ sub handle_notification {
 		}
 		print $lcd_handle "hello\n";
 		print $lcd_handle "widget_set twitter name \"$username\"\n";
+		# Clear the screen before showing the tweet - this should prevent overlap issues
+		print $lcd_handle "widget_set twitter line2 $line2coords \" \"\n";
+		print $lcd_handle "widget_set twitter line3 $line3coords \" \"\n";
+		print $lcd_handle "widget_set twitter line4 $line4coords \" \"\n";
+		# Display the tweet strings
 		print $lcd_handle "widget_set twitter line2 $line2coords \"$line2\"\n";
 		print $lcd_handle "widget_set twitter line3 $line3coords \"$line3\"\n";
 		print $lcd_handle "widget_set twitter line4 $line4coords \"$line4\"\n";
