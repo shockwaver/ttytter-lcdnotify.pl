@@ -77,6 +77,8 @@ $addaction = sub {
 									}
 				case "help"			{print_help();
 										return 1;}
+				case "dump"			{print Dumper($store);
+										return 1;}
 				else				{print_help();
 										return 1;}
 			}
