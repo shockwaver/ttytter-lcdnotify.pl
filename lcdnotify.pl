@@ -48,17 +48,17 @@ $addaction = sub {
 			switch ($command) {
 				case "disable" 		{$lcdnotify_enabled=0;
 										#shutdown_lcd();
-										print "pre disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
-										$store->{'lcdnotify'}->{'test'}="0";
-										print "disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
+										print "pre disable global: ".$store->{'lcdnotify'}->{'test1'}."\n";
+										$store->{'lcdnotify'}->{'test1'}="0";
+										print "disable global: ".$store->{'lcdnotify'}->{'test1'}."\n";
 										print Dumper($store);
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
 										#init_lcd();
-										print "pre enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
-										$store->{'lcdnotify'}->{'test'}="1";
-										print "enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
+										print "pre enable global: ".$store->{'lcdnotify'}->{'test1'}."\n";
+										$store->{'lcdnotify'}->{'test1'}="1";
+										print "enable global: ".$store->{'lcdnotify'}->{'test1'}."\n";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
 				case "dm"			{dm_setting(); return 1;}
