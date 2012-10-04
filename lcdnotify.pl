@@ -30,6 +30,7 @@
 print "test\n";
 use IO::Socket;
 use Switch;
+use Data::Dumper;
 
 # scroller coords for line2, line3 and line4
 my $line2coords="1 2";
@@ -50,6 +51,7 @@ $addaction = sub {
 										print "pre disable global: ".$store->{'lcdnotify'}."\n";
 										$store->{'lcdnotify'}="0";
 										print "disable global: ".$store->{'lcdnotify'}."\n";
+										print Dumper($store);
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
@@ -251,10 +253,8 @@ sub notifier_lcdnotify {
 	
 	#global test
 	print "Store master test variable:".$store->{'lcdnotify'}."\n";
-	for my $key ( keys %store ) {
-        my $value = $store{$key};
-        print "$key => $value\n";
-    }
+	print Dumper($store);
+	
 	$lcdnotify_testing=1;
 	my $class = shift;
 	my $text = shift;
