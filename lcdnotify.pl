@@ -47,10 +47,12 @@ $addaction = sub {
 			switch ($command) {
 				case "disable" 		{$lcdnotify_enabled=0;
 										shutdown_lcd();
+										$store->('test')="0";
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
 										init_lcd();
+										$store->('test')="1";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
 				case "dm"			{dm_setting(); return 1;}
@@ -242,6 +244,9 @@ sub handle_notification {
 # This sub is called when TTYtter sends a notification and -notifytype=lcdnotify
 sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
+	
+	#global test
+	print "Store master test variable:".$store->('test')."\n";
 	
 	$lcdnotify_testing=1;
 	my $class = shift;
