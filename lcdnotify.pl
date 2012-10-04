@@ -48,17 +48,17 @@ $addaction = sub {
 			switch ($command) {
 				case "disable" 		{$lcdnotify_enabled=0;
 										#shutdown_lcd();
-										print "pre disable global: ".$store->{'lcdnotify'}."\n";
+										print "pre disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										$store->{'lcdnotify'}="0";
-										print "disable global: ".$store->{'lcdnotify'}."\n";
+										print "disable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										print Dumper($store);
 										print $stdout "lcdnotify disabled.\n";
 										return 1;}
 				case "enable"  		{$lcdnotify_enabled=1;
 										#init_lcd();
-										print "pre enable global: ".$store->{'lcdnotify'}."\n";
+										print "pre enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										$store->{'lcdnotify'}="1";
-										print "enable global: ".$store->{'lcdnotify'}."\n";
+										print "enable global: ".$store->{'lcdnotify'}->{'test'}."\n";
 										print $stdout "lcdnotify enabled.\n";
 										return 1;}
 				case "dm"			{dm_setting(); return 1;}
@@ -254,7 +254,7 @@ sub notifier_lcdnotify {
 	# return 1 if(!$ENV{'DISPLAY'});
 	
 	#global test
-	print "Store master test variable:".$store->{'lcdnotify'}."\n";
+	print "Store master test variable:".$store->{'lcdnotify'}->{'test'}."\n";
 	print Dumper($store);
 	
 	$lcdnotify_testing=1;
@@ -273,7 +273,7 @@ sub notifier_lcdnotify {
 			}
 			#turn on notifications at start time
 			#$lcdnotify_enabled=1;
-			$store->{'lcdnotify'}="stupid";
+			$store->{'lcdnotify'}->{'test'}="stupid";
 			# $lcdnotify_testing=0;
 			# don't pass to handler if initalizing
 			return 1;
