@@ -258,7 +258,7 @@ sub notifier_lcdnotify {
 				die "Init_lcd failed at";
 			}
 			#turn on notifications at start time
-			$lcdnotify_enabled=1;
+			#$lcdnotify_enabled=1;
 			# $lcdnotify_testing=0;
 			# don't pass to handler if initalizing
 			return 1;
