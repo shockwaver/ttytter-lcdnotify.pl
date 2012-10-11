@@ -95,6 +95,7 @@ sub handle_notification {
 	# $1 is first 20 characters
 	# $2 is next 20 characters, but will not break up a word at the end
 	# $3 is the rest of the string
+	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
 	
 	$line2=$1;
 	# if we have a match on part two
