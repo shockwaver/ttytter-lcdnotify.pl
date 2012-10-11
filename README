@@ -1,3 +1,5 @@
+This extension requires LCDd/lcdproc server to be configured and running locally.
+
 To use this extenstion, add -exts=/path/to/lcdnotify.pl and -notifytype=lcdnotify
 to either your start script, or to your .ttytterrc file.
 
