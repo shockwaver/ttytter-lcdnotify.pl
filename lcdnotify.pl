@@ -92,7 +92,9 @@ sub handle_notification {
 	
 	# strip newline characters - causes issues when passing to LCD
 	$tweet=~s/\n/ /g;
-	print "third replace: $tweet\n";
+	
+	#replace double quotes with escaped double quotes
+	# $tweet=~s/"/\"/g;
 	
 	# break down the tweet in to LCd friendly lines
 	# new regex (.{0,20})(.{0,20})\s(.*)
@@ -101,17 +103,18 @@ sub handle_notification {
 	# $3 is the rest of the string
 	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
 	
-	print "1: $1\n:";
-	print "2: $2\n:";
-	print "3: $3\n:";
-	
 	$line2=$1;
 	# if we have a match on part two
 	if ($2) {$line3=$2;}
 	#if the match is on part 3, and part 2
 	if ($3 && $2) {$line4=$3." -- ";}
 	#if the match is on part 3, and not on part 2
-	if ($3 && !$2) {$line3=$3; $line4=" ";}	
+	if ($3 && !$2) {$line3=$3; $line4=" ";}
+
+	# escape double quotes
+	$line2=~s/"/\"/g;
+	$line3=~s/"/\"/g;
+	$line4=~s/"/\"/g;
 	
 	# now display the tweet
 	if ($lcd_handle)
