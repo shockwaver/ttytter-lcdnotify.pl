@@ -80,15 +80,19 @@ sub handle_notification {
 	# Clear the old lines out - this is important if the next tweet is less then 41 characters
 	($line1, $line2, $line3)="";
 	
+	print "init tweet: $tweet\n";
 	# replace unicode punctuation (open and close quote, apostrophe, etc) with asciii versions
 	# as LCD screen does not display those characters.
 	# single quotes (left and right):
 	$tweet=~s/\x{2018}|\x{2019}/'/g;
+	print "first replace: $tweet\n";
 	# double quotes (several unicode versions):
 	$tweet=~s/\x{201C}|\x{201D}|\x{201f}|\x{301D}\x{301E}|\x{FF02}/"/g;
+	print "second replace: $tweet\n";
 	
 	# strip newline characters - causes issues when passing to LCD
 	$tweet=~s/\n/ /g;
+	print "third replace: $tweet\n";
 	
 	# break down the tweet in to LCd friendly lines
 	# new regex (.{0,20})(.{0,20})\s(.*)
@@ -96,6 +100,10 @@ sub handle_notification {
 	# $2 is next 20 characters, but will not break up a word at the end
 	# $3 is the rest of the string
 	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
+	
+	print "1: $1\n:";
+	print "2: $2\n:";
+	print "3: $3\n:";
 	
 	$line2=$1;
 	# if we have a match on part two
