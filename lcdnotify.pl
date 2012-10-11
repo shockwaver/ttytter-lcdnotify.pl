@@ -95,11 +95,14 @@ sub handle_notification {
 	# $1 is first 20 characters
 	# $2 is next 20 characters, but will not break up a word at the end
 	# $3 is the rest of the string
-
-	$tweet=~m/(.{0,20})(.{0,20})\s(.*)/;
+	
 	$line2=$1;
-	$line3=$2;
-	$line4=$3." -- ";
+	# if we have a match on part two
+	if ($2) {$line3=$2;}
+	#if the match is on part 3, and part 2
+	if ($3 && $2) {$line4=$3." -- ";}
+	#if the match is on part 3, and not on part 2
+	if ($3 && !$2) {$line3=$3; $line4=" ";}	
 	
 	# now display the tweet
 	if ($lcd_handle)
